@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Paint;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,10 +24,7 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -65,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String update = null;
                 switch (v.getId()) {
-                    case R.id.button4:
+                    case R.id.paragraph_button:
                         try {
                             update = "\n\t \t \t";
                             update(update);
@@ -73,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                             n.printStackTrace();
                         }
                         break;
-                    case R.id.button5:
+                    case R.id.period_button:
                         try {
                             update = ". ";
                             update(update);
@@ -81,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                             n.printStackTrace();
                         }
                         break;
-                    case R.id.button6:
+                    case R.id.exclamation_button:
                         try {
                             update = "! ";
                             update(update);
@@ -89,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                             n.printStackTrace();
                         }
                         break;
-                    case R.id.button7:
+                    case R.id.question_button:
                         try {
                             update = "? ";
                             update(update);
@@ -97,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                             n.printStackTrace();
                         }
                         break;
-                    case R.id.button8:
+                    case R.id.comma_button:
                         try {
                             update = ", ";
                             update(update);
@@ -105,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                             n.printStackTrace();
                         }
                         break;
-                    case R.id.button9:
+                    case R.id.backspace_button:
                         try {
                             try {
                                 String[] backspace = story.split(" ");
@@ -117,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                     lines = redone;
                                 }
                                 setLines(lines);
-                                String tip = tipFinder(lines);
+                                String tip = TextManipulate.tipFinder(lines);
                                 fillList(tip);
                             } catch (NullPointerException n) {
                                 n.printStackTrace();
@@ -130,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        Button b2 = (Button) findViewById(R.id.button4);
-        Button b3 = (Button) findViewById(R.id.button5);
-        Button b4 = (Button) findViewById(R.id.button9);
-        Button b5 = (Button) findViewById(R.id.button8);
-        Button b6 = (Button) findViewById(R.id.button7);
-        Button b7 = (Button) findViewById(R.id.button6);
+        Button b2 = (Button) findViewById(R.id.paragraph_button);
+        Button b3 = (Button) findViewById(R.id.period_button);
+        Button b4 = (Button) findViewById(R.id.backspace_button);
+        Button b5 = (Button) findViewById(R.id.comma_button);
+        Button b6 = (Button) findViewById(R.id.question_button);
+        Button b7 = (Button) findViewById(R.id.exclamation_button);
         b2.setOnClickListener(myListner);
         b3.setOnClickListener(myListner);
         b4.setOnClickListener(myListner);
@@ -143,17 +138,20 @@ public class MainActivity extends AppCompatActivity {
         b6.setOnClickListener(myListner);
         b7.setOnClickListener(myListner);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.tool_menu, menu);
         return true;
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-    public void saveCorpus(){
+
+    public void saveCorpus() {
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.corpus);
             try {
@@ -166,10 +164,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     contents = result.toString();
                     System.out.println(contents);
-                    try{
-                        addWords(contents);
-                    }
-                    catch (NullPointerException n){
+                    try {
+                        MarkovChain.addWords(contents, markovChain);
+                    } catch (NullPointerException n) {
 
                     }
                 } finally {
@@ -179,8 +176,9 @@ public class MainActivity extends AppCompatActivity {
                 inputStream.close();
             }
         } catch (IOException e) {
-           }
+        }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -210,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 // Do something with the content in
                 contents = builder.toString();
-                addWords(contents);
+                MarkovChain.addWords(contents, markovChain);
             } catch (FileNotFoundException e) {
                 ((TextView) findViewById(R.id.textView)).setText("FileNotFoundException");
                 e.printStackTrace();
@@ -234,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     public String getRealPathFromURI(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
@@ -256,8 +255,6 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
-
-
     public void load(MenuItem item) {
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -269,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
             r.printStackTrace();
         }
     }
+
     public void share(MenuItem item) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -276,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
     }
+
     public void clear(MenuItem item) {
         TextView tipLine = (TextView) findViewById(R.id.textView);
         TextView storyMode = (TextView) findViewById(R.id.textView11);
@@ -293,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
     }
+
     public void clearContents(MenuItem item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Restart app to clear corpus list");
@@ -301,38 +301,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-
-    public String tipFinder(String lines) {
-        String reduced = lines.replace(". ", "").replace("? ", "").replace("! ", "").replace("\" ", "");
-        String[] tipfinder = reduced.split(" ");
-        String tip = tipfinder[tipfinder.length - 1];
-        return tip.toLowerCase();
-    }
-    public String rndWord(String contents) {
-        Random rnd = new Random();
-        String[] token = contents.split(" ");
-        String word;
-        word = token[rnd.nextInt(token.length)];
-        return word;
-    }
-    private static String removeLastChar(String str) {
-        return str.substring(0, str.length() - 1);
-    }
-    public static String toTitleCase(String input) {
-        StringBuilder titleCase = new StringBuilder();
-        boolean nextTitleCase = true;
-        for (char c : input.toCharArray()) {
-            if (Character.isSpaceChar(c)) {
-                nextTitleCase = true;
-            } else if (nextTitleCase) {
-                c = Character.toTitleCase(c);
-                nextTitleCase = false;
-            }
-            titleCase.append(c);
-        }
-        return titleCase.toString();
-    }
     public void setLines(String newLine) {
         TextView tipLine = (TextView) findViewById(R.id.textView);
         TextView storyMode = (TextView) findViewById(R.id.textView11);
@@ -355,18 +323,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void update(String tip) {
         if (lines == null) {
-            lines = "\n\t \t \t " + toTitleCase(tip);
+            lines = "\n\t \t \t " + TextManipulate.toTitleCase(tip);
             setLines(lines);
             fillList(tip);
-        } else if (tip == ". " || tip == "? " || tip == "! " ||tip == ", "|| tip == "\n\t \t \t") {
+        } else if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n\t \t \t") {
             setLines(lines + tip);
             fillList(tip);
 
-        }else
-         {
+        } else {
             lines = lines + " " + tip;
             setLines(lines);
-            tip = tipFinder(lines);
+            tip = TextManipulate.tipFinder(lines);
             fillList(tip);
         }
     }
@@ -375,26 +342,26 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> ink = new ArrayList<String>();
         if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n\t \t \t") {
             for (int i = 0; i < 15; i++) {
-                String blink = rndWord(contents);
-                if (tip != ", " ){
+                String blink = TextManipulate.rndWord(contents);
+                if (tip != ", ") {
                     try {
                         blink = blink.substring(0, 1).toUpperCase() + blink.substring(1);
                     } catch (StringIndexOutOfBoundsException s) {
                         continue;
-                    }}
-                    ink.add(blink);
-// add elements to al, including duplicates
-                    Set<String> hs = new HashSet<>(ink);
-                    hs.addAll(ink);
-                    ink.clear();
-                    ink.addAll(hs);
+                    }
                 }
-
-                updateList(ink);
+                ink.add(blink);
+// add elements to al, including duplicates
+                Set<String> hs = new HashSet<>(ink);
+                hs.addAll(ink);
+                ink.clear();
+                ink.addAll(hs);
             }
-         else {
+
+            updateList(ink);
+        } else {
             for (int i = 0; i < 60; i++) {
-                String blink = generateInk(markovChain, tip, 1);
+                String blink = MarkovChain.generateInk(markovChain, tip);
                 System.out.println(blink);
                 if (blink != " " && blink != null && blink != "") {
                     ink.add(blink);
@@ -408,6 +375,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     public void updateList(ArrayList<String> ink) {
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ink);
         final ListView listView = (ListView) findViewById(R.id.ListView);
@@ -421,65 +389,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    
-    public void addWords(String phrase) {
-        //Here is where I must add multiple orders to my list
-
-        String[] words;
-        markovChain.put("_start", new Vector<String>());
-        words = phrase.split(" ");
-        for (int i = 0; i < words.length; i++) {
-            if (i == 0) {
-                Vector<String> startWords = markovChain.get("_start");
-                startWords.add(words[i]);
-                Vector<String> suffix = markovChain.get(words[i]);
-                if (suffix == null) {
-                    suffix = new Vector<String>();
-                    suffix.add(words[i + 1]);
-                    markovChain.put(words[i], suffix);
-                }
-            } else if (i == words.length - 1) {
-                Vector<String> endWords = markovChain.get("_end");
-                endWords.add(words[i]);
-            } else {
-                Vector<String> suffix = markovChain.get(words[i]);
-                if (suffix == null) {
-                    suffix = new Vector<String>();
-                    suffix.add(words[i + 1] + " " + words[i + 2]);
-                    markovChain.put(words[i], suffix);
-                } else {
-                    suffix.add(words[i + 1]);
-                    markovChain.put(words[i], suffix);
-                }
-            }
-        }
-    }
-    public static String generateInk(Hashtable<String, Vector<String>> markovChain, String tip, int numWords) {
-        Random rnd = new Random();
-        String nextWord=tip;
-
-        String newWord = new String("");
-        Vector<String> newPhrase = new Vector<String>();
-
-        Vector<String> nextWords = markovChain.get(tip);
-
-        if (nextWords != null && nextWords.size() != 0) {
-           try {
-                for (int i = 0; i < 8; i++) {
-                    Vector<String> wordSelection = markovChain.get(nextWord);
-                    int wordSelectionLen = wordSelection.size();
-                    nextWord = wordSelection.get(rnd.nextInt(wordSelectionLen));
-                    newPhrase.add(nextWord);
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                return generateInk(markovChain, tip, numWords);
-            }catch (NullPointerException n){
-
-
-           }
-        } else {
-        }
-        return newPhrase.toString().replace("[", "").replace("]", "").replace(",", "");
-
-    }
 }
