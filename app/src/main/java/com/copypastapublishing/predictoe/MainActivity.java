@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
         fillList("");
         TextView corpus = (TextView) findViewById(R.id.corpus_info);
         corpus.setText("");
+        corpustext=null;
     }
 
     public void setLines(String newLine) {
@@ -339,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
     public void fillList(String tip) {
         ArrayList<String> ink = new ArrayList<String>();
         if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n\t \t \t") {
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < 60 ; i++) {
                 String blink = TextManipulate.rndWord(contents);
                 if (tip != ", ") {
                     try {
