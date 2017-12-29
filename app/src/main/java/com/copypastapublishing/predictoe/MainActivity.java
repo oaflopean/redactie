@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                     lines = redone;
                                 }
                                 setLines(lines);
-                                String tip = TextManipulate.tipFinder(lines);
+                                String tip = MarkovChain.tipFinder(lines);
                                 fillList(tip);
                             } catch (NullPointerException n) {
                                 n.printStackTrace();
@@ -149,34 +149,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-    public void saveCorpus() {
-        try {
-            InputStream inputStream = getResources().openRawResource(R.raw.corpus);
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                try {
-                    StringBuilder result = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        result.append(line);
-                    }
-                    contents = result.toString();
-                    System.out.println(contents);
-                    try {
-                        MarkovChain.addWords(contents, markovChain);
-                    } catch (NullPointerException n) {
-
-                    }
-                } finally {
-                    reader.close();
-                }
-            } finally {
-                inputStream.close();
-            }
-        } catch (IOException e) {
-        }
     }
 
     @Override
@@ -320,7 +292,33 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    public void saveCorpus() {
+        try {
+            InputStream inputStream = getResources().openRawResource(R.raw.corpus);
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                try {
+                    StringBuilder result = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+                    contents = result.toString();
+                    System.out.println(contents);
+                    try {
+                        MarkovChain.addWords(contents, markovChain);
+                    } catch (NullPointerException n) {
 
+                    }
+                } finally {
+                    reader.close();
+                }
+            } finally {
+                inputStream.close();
+            }
+        } catch (IOException e) {
+        }
+    }
     public void update(String tip) {
         if (lines == null) {
             lines = "\n\t \t \t " + TextManipulate.toTitleCase(tip);
@@ -333,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             lines = lines + " " + tip;
             setLines(lines);
-            tip = TextManipulate.tipFinder(lines);
+            tip = MarkovChain.tipFinder(lines);
             fillList(tip);
         }
     }

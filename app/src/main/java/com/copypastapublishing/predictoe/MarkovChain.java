@@ -9,6 +9,16 @@ import java.util.Vector;
  */
 
 public class MarkovChain {
+
+    public static String tipFinder(String lines) {
+        try{String reduced = lines.replace(". ", "").replace("? ", "").replace("! ", "").replace("\" ", "");
+            String[] tipfinder = reduced.split(" ");
+            String tip = tipfinder[tipfinder.length - 1];
+            return tip.toLowerCase();
+        }catch(ArrayIndexOutOfBoundsException a){
+            return "\n\t \t \t";
+        }}
+
     public static void addWords(String phrase, Hashtable<String, Vector<String>> markovChain) {
         //Here is where I must add multiple orders to my list
 

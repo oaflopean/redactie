@@ -1,5 +1,9 @@
 package com.copypastapublishing.predictoe;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 /**
@@ -7,14 +11,8 @@ import java.util.Random;
  */
 
 public class TextManipulate {
-    public static String tipFinder(String lines) {
-        try{String reduced = lines.replace(". ", "").replace("? ", "").replace("! ", "").replace("\" ", "");
-        String[] tipfinder = reduced.split(" ");
-        String tip = tipfinder[tipfinder.length - 1];
-        return tip.toLowerCase();
-    }catch(ArrayIndexOutOfBoundsException a){
-            return "\n\t \t \t";
-        }}
+
+
     public static String rndWord(String contents) {
         Random rnd = new Random();
         String[] token = contents.split(" ");
@@ -39,4 +37,5 @@ public class TextManipulate {
         }
         return titleCase.toString();
     }
+
 }
