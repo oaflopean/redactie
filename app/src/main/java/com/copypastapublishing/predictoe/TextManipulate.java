@@ -20,9 +20,7 @@ public class TextManipulate {
         word = token[rnd.nextInt(token.length)];
         return word;
     }
-    private static String removeLastChar(String str) {
-        return str.substring(0, str.length() - 1);
-    }
+
     public static String toTitleCase(String input) {
         StringBuilder titleCase = new StringBuilder();
         boolean nextTitleCase = true;

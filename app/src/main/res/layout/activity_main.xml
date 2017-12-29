@@ -29,7 +29,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/corpus_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -110,7 +110,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/line_text"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
 
@@ -135,105 +135,114 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout7"
-        android:layout_width="wrap_content"
+        android:id="@+id/bottomLayout"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/topLayout"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/topLayout"
-        android:background="@color/storyBG"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/linearLayout7"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_below="@+id/topLayout"
             android:background="@color/storyBG"
-            android:orientation="vertical"
-            android:paddingBottom="25dp"
-            android:paddingTop="25dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/storyBG"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingBottom="25dp"
+                android:paddingTop="25dp">
 
                 <LinearLayout
-                    android:layout_width="20dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:background="@color/storyBG"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="31dp"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginTop="0dp"
+                    <LinearLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:srcCompat="@android:drawable/presence_invisible" />
+                        android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="31dp"
-                        android:layout_marginTop="75dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@android:drawable/presence_invisible" />
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="31dp"
+                            android:layout_height="31dp"
+                            android:layout_marginBottom="0dp"
+                            android:layout_marginTop="0dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@android:drawable/presence_invisible" />
 
-                    <ImageView
-                        android:id="@+id/imageView2"
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="31dp"
+                            android:layout_height="31dp"
+                            android:layout_marginTop="75dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@android:drawable/presence_invisible" />
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="31dp"
+                            android:layout_height="31dp"
+                            android:layout_marginBottom="0dp"
+                            android:layout_marginTop="75dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@android:drawable/presence_invisible" />
+
+                    </LinearLayout>
+
+                    <TextView
+
+                        android:id="@+id/story_text"
                         android:layout_width="match_parent"
-                        android:layout_height="31dp"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginTop="75dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
                         android:layout_weight="1"
-                        app:srcCompat="@android:drawable/presence_invisible" />
+                        android:fontFamily="serif-monospace"
+                        android:gravity="bottom|center_vertical"
+                        android:lineSpacingMultiplier="1.041"
+                        android:text="@string/restingStory"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:tileMode="repeat" />
 
                 </LinearLayout>
-
-                <TextView
-
-                    android:id="@+id/textView11"
-                    android:layout_width="195dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="6dp"
-                    android:layout_weight="1"
-                    android:fontFamily="serif-monospace"
-                    android:gravity="bottom|center_vertical"
-                    android:lineSpacingMultiplier="1.041"
-                    android:text="@string/restingStory"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:tileMode="repeat" />
 
             </LinearLayout>
 
         </LinearLayout>
 
+        <ListView
+            android:id="@+id/ListView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_below="@+id/topLayout"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginVertical="0dp"
+            android:layout_toEndOf="@+id/linearLayout7"
+            android:layout_weight="1"
+            android:alwaysDrawnWithCache="true"
+            android:background="@android:color/holo_red_light"
+            android:clickable="true"
+            android:entries="@array/restingBrush"
+            android:scrollingCache="true"
+            android:smoothScrollbar="true"
+            android:stretchMode="spacingWidthUniform">
+
+
+        </ListView>
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/ListView"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_below="@+id/topLayout"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginVertical="0dp"
-        android:layout_toEndOf="@+id/linearLayout7"
-        android:layout_weight="1"
-        android:alwaysDrawnWithCache="true"
-        android:background="@android:color/holo_red_light"
-        android:clickable="true"
-        android:entries="@array/restingBrush"
-        android:scrollingCache="true"
-        android:smoothScrollbar="true"
-        android:stretchMode="spacingWidthUniform"
-        >
-
-
-    </ListView>
 
 </RelativeLayout>

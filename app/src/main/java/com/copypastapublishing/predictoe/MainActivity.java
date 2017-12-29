@@ -31,7 +31,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         saveCorpus();
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        TextView storyMode = (TextView) findViewById(R.id.textView11);
+        TextView storyMode = (TextView) findViewById(R.id.story_text);
         storyMode.setMovementMethod(new ScrollingMovementMethod());
         View.OnClickListener myListner = new View.OnClickListener() {
             @Override
@@ -162,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 corpustext = corpustext + ", " + getRealPathFromURI(content_describer);
             }
-            TextView corpus = (TextView) findViewById(R.id.textView22);
+            TextView corpus = (TextView) findViewById(R.id.corpus_info);
             corpus.setText(corpustext);
             //get the path
             Log.d("Path???", content_describer.getPath());
@@ -182,11 +181,11 @@ public class MainActivity extends AppCompatActivity {
                 contents = builder.toString();
                 MarkovChain.addWords(contents, markovChain);
             } catch (FileNotFoundException e) {
-                ((TextView) findViewById(R.id.textView)).setText("FileNotFoundException");
+                ((TextView) findViewById(R.id.line_text)).setText("FileNotFoundException");
                 e.printStackTrace();
                 e.printStackTrace();
             } catch (IOException e) {
-                ((TextView) findViewById(R.id.textView)).setText("IOException");
+                ((TextView) findViewById(R.id.line_text)).setText("IOException");
                 e.printStackTrace();
             } catch (RuntimeException r) {
                 r.printStackTrace();
@@ -197,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         reader.close();
                     } catch (IOException e) {
-                        ((TextView) findViewById(R.id.textView)).setText("IOException");
+                        ((TextView) findViewById(R.id.line_text)).setText("IOException");
                         e.printStackTrace();
                     }
                 }
@@ -248,8 +247,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clear(MenuItem item) {
-        TextView tipLine = (TextView) findViewById(R.id.textView);
-        TextView storyMode = (TextView) findViewById(R.id.textView11);
+        TextView tipLine = (TextView) findViewById(R.id.line_text);
+        TextView storyMode = (TextView) findViewById(R.id.story_text);
         tipLine.setText("\t \t \t ");
         storyMode.setText("\t \t \t ");
         lines = "";
@@ -266,16 +265,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clearContents(MenuItem item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Restart app to clear corpus list");
-        builder.setTitle("Error");
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        markovChain.clear();
+        contents=null;
+        fillList("");
+        TextView corpus = (TextView) findViewById(R.id.corpus_info);
+        corpus.setText("");
     }
 
     public void setLines(String newLine) {
-        TextView tipLine = (TextView) findViewById(R.id.textView);
-        TextView storyMode = (TextView) findViewById(R.id.textView11);
+        TextView tipLine = (TextView) findViewById(R.id.line_text);
+        TextView storyMode = (TextView) findViewById(R.id.story_text);
         storyMode.setPaintFlags(storyMode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         if (lines == null) {
             storyMode.setText("");
