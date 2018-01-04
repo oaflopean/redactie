@@ -39,8 +39,9 @@ public class MainActivity extends AppCompatActivity {
     static final int PICKFILE_RESULT_CODE = 1;
     String word;
     String input;
+    public static String kind = null;
     private static String contents = null;
-    private static String corpustext = null;
+    private static String corpustext = "corpus.txt";
     private static String story = null;
     private static String lines = null;
     Hashtable<String, Vector<String>> markovChain = new Hashtable<String, Vector<String>>();
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.paragraph_button:
                         try {
-                            update = "\n\t \t \t";
+                            update = "\n \t";
                             update(update);
                         } catch (NullPointerException n) {
                             n.printStackTrace();
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 r.printStackTrace();
             } finally {
                 setLines(lines);
-                update("\n\t \t \t");
+                update("\n \t");
                 if (reader != null) {
                     try {
                         reader.close();
@@ -239,22 +240,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void share(MenuItem item) {
+        String output=corpustext+story;
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, story);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, output);
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
     }
 
     public void clear(MenuItem item) {
-        TextView tipLine = (TextView) findViewById(R.id.line_text);
-        TextView storyMode = (TextView) findViewById(R.id.story_text);
-        tipLine.setText("\t \t \t ");
-        storyMode.setText("\t \t \t ");
-        lines = "";
-        story = "\t \t \t";
+
+        String update = "\n \t";
         try {
-            fillList("\n\t \t \t");
+            update(update);
+
         } catch (NullPointerException n) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("You must upload a text file.");
@@ -267,11 +266,11 @@ public class MainActivity extends AppCompatActivity {
     public void clearContents(MenuItem item) {
 
         markovChain.clear();
-        contents=null;
+        contents = null;
         fillList("");
         TextView corpus = (TextView) findViewById(R.id.corpus_info);
         corpus.setText("");
-        corpustext=null;
+        corpustext = null;
     }
 
     public void setLines(String newLine) {
@@ -285,14 +284,15 @@ public class MainActivity extends AppCompatActivity {
             lines = newLine;
             story = newLine;
         } else {
-            storyMode.setText(lines);
+            storyMode.setText(newLine);
             storyMode.setMovementMethod(new ScrollingMovementMethod());
-            tipLine.setText(lines.replace("\n", ""));
+            tipLine.setText(newLine.replace("\n", ""));
             lines = newLine;
             story = newLine;
 
         }
     }
+
     public void saveCorpus() {
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.corpus);
@@ -305,12 +305,11 @@ public class MainActivity extends AppCompatActivity {
                         result.append(line);
                     }
                     contents = result.toString();
-                    System.out.println(contents);
                     try {
                         MarkovChain.addWords(contents, markovChain);
                     } catch (NullPointerException n) {
-
                     }
+                    fillList("\n \t");
                 } finally {
                     reader.close();
                 }
@@ -320,15 +319,21 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
         }
     }
+
     public void update(String tip) {
         if (lines == null) {
-            lines = "\n\t \t \t " + TextManipulate.toTitleCase(tip);
+            lines = "\n\t" + TextManipulate.toTitleCase(tip);
             setLines(lines);
             fillList(tip);
-        } else if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n\t \t \t") {
+        } else if (tip == ". " || tip == "? " || tip == "! " || tip == "\n \t") {
             setLines(lines + tip);
             fillList(tip);
 
+        } else if (tip == ", ") {
+            lines = lines + tip;
+            setLines(lines);
+            tip = MarkovChain.tipFinder(lines);
+            fillList(tip);
         } else {
             lines = lines + " " + tip;
             setLines(lines);
@@ -339,43 +344,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void fillList(String tip) {
         ArrayList<String> ink = new ArrayList<String>();
-        if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n\t \t \t") {
-            for (int i = 0; i < 60 ; i++) {
-                String blink = TextManipulate.rndWord(contents);
-                if (tip != ", ") {
-                    try {
-                        blink = blink.substring(0, 1).toUpperCase() + blink.substring(1);
-                    } catch (StringIndexOutOfBoundsException s) {
-                        continue;
-                    }
-                }
+        if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n \t") {
+            for (int i = 0; i < 60; i++) {
+                String blink = MarkovChain.rndWord(markovChain);
                 ink.add(blink);
-// add elements to al, including duplicates
-                Set<String> hs = new HashSet<>(ink);
-                hs.addAll(ink);
-                ink.clear();
-                ink.addAll(hs);
             }
+            Set<String> hs = new HashSet<>(ink);
+            hs.addAll(ink);
+            ink.clear();
+            ink.addAll(hs);
 
+            kind = "random";
             updateList(ink);
         } else {
             for (int i = 0; i < 60; i++) {
-                String blink = MarkovChain.generateInk(markovChain, tip);
-                System.out.println(blink);
+                String blink = MarkovChain.generateInk(tip, markovChain);
                 if (blink != " " && blink != null && blink != "") {
                     ink.add(blink);
                 }
-                // add elements to al, including duplicates
                 Set<String> hs = new HashSet<>(ink);
                 hs.addAll(ink);
                 ink.clear();
                 ink.addAll(hs);
+                kind = "markov";
                 updateList(ink);
             }
         }
     }
 
     public void updateList(ArrayList<String> ink) {
+
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ink);
         final ListView listView = (ListView) findViewById(R.id.ListView);
         listView.setAdapter(arrayAdapter);
@@ -383,9 +381,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) listView.getItemAtPosition(position);
-                update(item);
+                if (kind == "random") {
+                    update(item);
+                } else {
+                    update(item);
+                }
             }
         });
     }
-
 }
