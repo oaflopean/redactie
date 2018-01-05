@@ -49,7 +49,7 @@ public class MarkovChain {
 
                 if (suffix == null) {
                     suffix = new Vector<String>();
-                    suffix.add(words[i + 1] + " " + words[i + 2]);
+                    suffix.add(words[i + 1]);
                     markovChain.put(words[i], suffix);
                 } else {
                     suffix.add(words[i + 1]);
@@ -71,7 +71,7 @@ public class MarkovChain {
 
         if (nextWords != null && nextWords.size() != 0) {
             try {
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < 4; i++) {
                     Vector<String> wordSelection = markovChain.get(nextWord);
                     int wordSelectionLen = wordSelection.size();
                     nextWord = wordSelection.get(rnd.nextInt(wordSelectionLen));
@@ -103,7 +103,7 @@ public class MarkovChain {
         Vector<String> nextWords = markovChain.get(tip);
         if (nextWords != null && nextWords.size() != 0) {
             try {
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < 4; i++) {
                     Vector<String> wordSelection = markovChain.get(nextWord);
                     int wordSelectionLen = wordSelection.size();
                     nextWord = wordSelection.get(rnd.nextInt(wordSelectionLen));

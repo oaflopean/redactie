@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     String input;
     public static String kind = null;
     private static String contents = null;
-    private static String corpustext = "corpus.txt";
+    private static String corpusinfotext = "corpus.txt";
     private static String story = null;
     private static String lines = null;
     Hashtable<String, Vector<String>> markovChain = new Hashtable<String, Vector<String>>();
@@ -125,18 +125,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        Button b2 = (Button) findViewById(R.id.paragraph_button);
-        Button b3 = (Button) findViewById(R.id.period_button);
-        Button b4 = (Button) findViewById(R.id.backspace_button);
-        Button b5 = (Button) findViewById(R.id.comma_button);
-        Button b6 = (Button) findViewById(R.id.question_button);
-        Button b7 = (Button) findViewById(R.id.exclamation_button);
-        b2.setOnClickListener(myListner);
-        b3.setOnClickListener(myListner);
-        b4.setOnClickListener(myListner);
-        b5.setOnClickListener(myListner);
-        b6.setOnClickListener(myListner);
-        b7.setOnClickListener(myListner);
+        Button text_manip2 = (Button) findViewById(R.id.paragraph_button);
+        Button text_manip3 = (Button) findViewById(R.id.period_button);
+        Button text_manip4 = (Button) findViewById(R.id.backspace_button);
+        Button text_manip5 = (Button) findViewById(R.id.comma_button);
+        Button text_manip6 = (Button) findViewById(R.id.question_button);
+        Button text_manip7 = (Button) findViewById(R.id.exclamation_button);
+        text_manip2.setOnClickListener(myListner);
+        text_manip3.setOnClickListener(myListner);
+        text_manip4.setOnClickListener(myListner);
+        text_manip5.setOnClickListener(myListner);
+        text_manip6.setOnClickListener(myListner);
+        text_manip7.setOnClickListener(myListner);
     }
 
     @Override
@@ -157,13 +157,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
             contents = null;
             Uri content_describer = data.getData();
-            if (corpustext == null) {
-                corpustext = getRealPathFromURI(content_describer);
+            if (corpusinfotext == null) {
+                corpusinfotext = getRealPathFromURI(content_describer);
             } else {
-                corpustext = corpustext + ", " + getRealPathFromURI(content_describer);
+                corpusinfotext = corpusinfotext + ", " + getRealPathFromURI(content_describer);
             }
             TextView corpus = (TextView) findViewById(R.id.corpus_info);
-            corpus.setText(corpustext);
+            corpus.setText(corpusinfotext);
             //get the path
             Log.d("Path???", content_describer.getPath());
             BufferedReader reader = null;
@@ -183,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
                 MarkovChain.addWords(contents, markovChain);
             } catch (FileNotFoundException e) {
                 ((TextView) findViewById(R.id.line_text)).setText("FileNotFoundException");
-                e.printStackTrace();
                 e.printStackTrace();
             } catch (IOException e) {
                 ((TextView) findViewById(R.id.line_text)).setText("IOException");
@@ -240,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void share(MenuItem item) {
-        String output=corpustext+story;
+        String output=corpusinfotext+story;
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, output);
@@ -249,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clear(MenuItem item) {
-
+        lines="";
+        story="";
         String update = "\n \t";
         try {
             update(update);
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         fillList("");
         TextView corpus = (TextView) findViewById(R.id.corpus_info);
         corpus.setText("");
-        corpustext = null;
+        corpusinfotext = null;
     }
 
     public void setLines(String newLine) {
@@ -317,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
                 inputStream.close();
             }
         } catch (IOException e) {
+            ((TextView) findViewById(R.id.line_text)).setText("IOException");
         }
     }
 
@@ -374,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateList(ArrayList<String> ink) {
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ink);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_white_text, R.id.list_content, ink);
         final ListView listView = (ListView) findViewById(R.id.ListView);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {

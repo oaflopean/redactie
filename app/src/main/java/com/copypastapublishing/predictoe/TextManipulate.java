@@ -16,8 +16,13 @@ public class TextManipulate {
 
 
     public static String toTitleCase(String input) {
-        input = input.substring(0, 1).toUpperCase() + input.substring(1);
+        try {
+            input = input.substring(0, 1).toUpperCase() + input.substring(1);
+        } catch (StringIndexOutOfBoundsException s) {
+            input=input.toUpperCase();
+        }
         return input;
     }
-
 }
+
+
