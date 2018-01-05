@@ -39,11 +39,10 @@ public class MainActivity extends AppCompatActivity {
     static final int PICKFILE_RESULT_CODE = 1;
     String word;
     String input;
-    public static String kind = null;
-    private static String contents = null;
+    private static String contents = "";
     private static String corpusinfotext = "corpus.txt";
-    private static String story = null;
-    private static String lines = null;
+    private static String story = "";
+    private static String lines = "";
     Hashtable<String, Vector<String>> markovChain = new Hashtable<String, Vector<String>>();
 
     @Override
@@ -58,72 +57,60 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener myListner = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String update = null;
+                String token = "";
                 switch (v.getId()) {
                     case R.id.paragraph_button:
-                        try {
-                            update = "\n \t";
-                            update(update);
-                        } catch (NullPointerException n) {
-                            n.printStackTrace();
-                        }
+
+                        token = "\n \t";
+                        updateEndOfMarkovChain(token);
+
                         break;
                     case R.id.period_button:
-                        try {
-                            update = ". ";
-                            update(update);
-                        } catch (NullPointerException n) {
-                            n.printStackTrace();
-                        }
+
+                        token = ". ";
+                        updateEndOfMarkovChain(token);
+
                         break;
                     case R.id.exclamation_button:
-                        try {
-                            update = "! ";
-                            update(update);
-                        } catch (NullPointerException n) {
-                            n.printStackTrace();
-                        }
+
+                        token = "! ";
+                        updateEndOfMarkovChain(token);
+
                         break;
                     case R.id.question_button:
-                        try {
-                            update = "? ";
-                            update(update);
-                        } catch (NullPointerException n) {
-                            n.printStackTrace();
-                        }
+
+                        token = "? ";
+                        updateEndOfMarkovChain(token);
+
                         break;
                     case R.id.comma_button:
-                        try {
-                            update = ", ";
-                            update(update);
-                        } catch (NullPointerException n) {
-                            n.printStackTrace();
-                        }
+
+                        token = ", ";
+                        updateEndOfMarkovChain(token);
+
                         break;
                     case R.id.backspace_button:
-                        try {
-                            try {
-                                String[] backspace = story.split(" ");
-                                String[] backspace2 = lines.split(" ");
-                                String redone = "";
-                                String redone2 = "";
-                                for (int z = 0; z < backspace.length - 1; z++) {
-                                    redone = redone + " " + backspace[z];
-                                    lines = redone;
-                                }
-                                setLines(lines);
-                                String tip = MarkovChain.tipFinder(lines);
-                                fillList(tip);
-                            } catch (NullPointerException n) {
-                                n.printStackTrace();
-                            }
-                            break;
-                        } catch (NullPointerException n) {
-                            n.printStackTrace();
+
+
+                        String[] backspace = story.split(" ");
+                        String redone = "";
+                        for (int z = 0; z < backspace.length - 1; z++) {
+                            redone = redone + " " + backspace[z];
+                            lines = redone;
                         }
-                        break;
+                        if (lines != " "||lines!=null||lines!="  "||lines!="") {
+                            setLines(lines);
+                            String tip = MarkovChain.tipFinder(lines);
+                            updateUserChoiceList(tip);
+                            break;
+                        } else {
+                            token = "\n \t";
+                            updateEndOfMarkovChain(token);
+                            break;
+                        }
                 }
             }
+
         };
         Button text_manip2 = (Button) findViewById(R.id.paragraph_button);
         Button text_manip3 = (Button) findViewById(R.id.period_button);
@@ -155,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            contents = null;
+            contents = "";
             Uri content_describer = data.getData();
-            if (corpusinfotext == null) {
+            if (corpusinfotext == "") {
                 corpusinfotext = getRealPathFromURI(content_describer);
             } else {
                 corpusinfotext = corpusinfotext + ", " + getRealPathFromURI(content_describer);
@@ -191,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 r.printStackTrace();
             } finally {
                 setLines(lines);
-                update("\n \t");
+                updateEndOfMarkovChain("\n \t");
                 if (reader != null) {
                     try {
                         reader.close();
@@ -239,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void share(MenuItem item) {
-        String output=corpusinfotext+story;
+        String output = corpusinfotext + story;
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, output);
@@ -248,11 +235,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clear(MenuItem item) {
-        lines="";
-        story="";
+        lines = "";
+        story = "";
         String update = "\n \t";
         try {
-            update(update);
+            updateEndOfMarkovChain(update);
 
         } catch (NullPointerException n) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -266,32 +253,13 @@ public class MainActivity extends AppCompatActivity {
     public void clearContents(MenuItem item) {
 
         markovChain.clear();
-        contents = null;
-        fillList("");
+        contents = "";
+        updateUserChoiceList("");
         TextView corpus = (TextView) findViewById(R.id.corpus_info);
         corpus.setText("");
-        corpusinfotext = null;
+        corpusinfotext = "";
     }
 
-    public void setLines(String newLine) {
-        TextView tipLine = (TextView) findViewById(R.id.line_text);
-        TextView storyMode = (TextView) findViewById(R.id.story_text);
-        storyMode.setPaintFlags(storyMode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        if (lines == null) {
-            storyMode.setText("");
-            storyMode.setMovementMethod(new ScrollingMovementMethod());
-            tipLine.setText("");
-            lines = newLine;
-            story = newLine;
-        } else {
-            storyMode.setText(newLine);
-            storyMode.setMovementMethod(new ScrollingMovementMethod());
-            tipLine.setText(newLine.replace("\n", ""));
-            lines = newLine;
-            story = newLine;
-
-        }
-    }
 
     public void saveCorpus() {
         try {
@@ -309,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                         MarkovChain.addWords(contents, markovChain);
                     } catch (NullPointerException n) {
                     }
-                    fillList("\n \t");
+                    updateUserChoiceList("\n \t");
                 } finally {
                     reader.close();
                 }
@@ -321,29 +289,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void update(String tip) {
-        if (lines == null) {
+    public void updateEndOfMarkovChain(String tip) {
+        if (lines == "") {
             lines = "\n\t" + TextManipulate.toTitleCase(tip);
             setLines(lines);
-            fillList(tip);
+            updateUserChoiceList(tip);
         } else if (tip == ". " || tip == "? " || tip == "! " || tip == "\n \t") {
             setLines(lines + tip);
-            fillList(tip);
+            updateUserChoiceList(tip);
 
         } else if (tip == ", ") {
             lines = lines + tip;
             setLines(lines);
             tip = MarkovChain.tipFinder(lines);
-            fillList(tip);
+            updateUserChoiceList(tip);
+
         } else {
+
             lines = lines + " " + tip;
             setLines(lines);
             tip = MarkovChain.tipFinder(lines);
-            fillList(tip);
+            updateUserChoiceList(tip);
         }
     }
 
-    public void fillList(String tip) {
+    public void updateUserChoiceList(String tip) {
         ArrayList<String> ink = new ArrayList<String>();
         if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n \t") {
             for (int i = 0; i < 60; i++) {
@@ -355,8 +325,7 @@ public class MainActivity extends AppCompatActivity {
             ink.clear();
             ink.addAll(hs);
 
-            kind = "random";
-            updateList(ink);
+            setList(ink);
         } else {
             for (int i = 0; i < 60; i++) {
                 String blink = MarkovChain.generateInk(tip, markovChain);
@@ -367,13 +336,33 @@ public class MainActivity extends AppCompatActivity {
                 hs.addAll(ink);
                 ink.clear();
                 ink.addAll(hs);
-                kind = "markov";
-                updateList(ink);
+
+                setList(ink);
             }
         }
     }
 
-    public void updateList(ArrayList<String> ink) {
+    public void setLines(String newLine) {
+        TextView tipLine = (TextView) findViewById(R.id.line_text);
+        TextView storyMode = (TextView) findViewById(R.id.story_text);
+        storyMode.setPaintFlags(storyMode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        if (lines == "") {
+            storyMode.setText("");
+            storyMode.setMovementMethod(new ScrollingMovementMethod());
+            tipLine.setText("");
+            lines = newLine;
+            story = newLine;
+        } else {
+            storyMode.setText(newLine);
+            storyMode.setMovementMethod(new ScrollingMovementMethod());
+            tipLine.setText(newLine.replace("\n", ""));
+            lines = newLine;
+            story = newLine;
+
+        }
+    }
+
+    public void setList(ArrayList<String> ink) {
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.list_white_text, R.id.list_content, ink);
         final ListView listView = (ListView) findViewById(R.id.ListView);
@@ -382,11 +371,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) listView.getItemAtPosition(position);
-                if (kind == "random") {
-                    update(item);
-                } else {
-                    update(item);
-                }
+
+                updateEndOfMarkovChain(item);
+
             }
         });
     }
