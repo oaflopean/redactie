@@ -346,20 +346,21 @@ public class MainActivity extends AppCompatActivity {
         TextView tipLine = (TextView) findViewById(R.id.line_text);
         TextView storyMode = (TextView) findViewById(R.id.story_text);
         storyMode.setPaintFlags(storyMode.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        String newStoryModeValue;
+        String newTipLineValue;
         if (lines == "") {
-            storyMode.setText("");
-            storyMode.setMovementMethod(new ScrollingMovementMethod());
-            tipLine.setText("");
-            lines = newLine;
-            story = newLine;
+            newStoryModeValue = "";
+            newTipLineValue = "";
+            
         } else {
-            storyMode.setText(newLine);
-            storyMode.setMovementMethod(new ScrollingMovementMethod());
-            tipLine.setText(newLine.replace("\n", ""));
-            lines = newLine;
-            story = newLine;
-
+            newStoryModeValue = newLine;
+            newTipLineValue = newLine.replace("\n", "");
         }
+        storyMode.setText(newStoryModeValue);
+        storyMode.setMovementMethod(new ScrollingMovementMethod());
+        tipLine.setText(newTipLineValue);
+        lines = newLine;
+        story = newLine;
     }
 
     public void setList(ArrayList<String> ink) {
