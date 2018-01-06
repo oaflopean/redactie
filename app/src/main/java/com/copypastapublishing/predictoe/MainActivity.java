@@ -259,7 +259,10 @@ public class MainActivity extends AppCompatActivity {
         corpus.setText("");
         corpusinfotext = "";
     }
-
+    public void startGutenberg(MenuItem item){
+        Intent intent = new Intent(this, GutenbergActivity.class);
+        startActivity(intent);
+    }
 
     public void saveCorpus() {
         try {

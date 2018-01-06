@@ -1,0 +1,44 @@
+{
+    "books": [
+        {
+            "title": null,
+            "url": ""
+        },
+        {
+            "title": "The Magna Carta by Anonymous",
+            "url": "http://www.gutenberg.org/ebooks/10000.txt.utf-8"
+        },
+        {
+            "title": "Apocolocyntosis by Seneca, Lucius Annaeus",
+            "url": "http://www.gutenberg.org/ebooks/10001.txt.utf-8"
+        },
+        {
+            "title": "The House on the Borderland by Hodgson, William Hope",
+            "url": "http://www.gutenberg.org/ebooks/10002.txt.utf-8"
+        },
+        {
+            "title": "My First Years as a Frenchwoman, 1876-1879 by Waddington, Mary King",
+            "url": "http://www.gutenberg.org/ebooks/10003.txt.utf-8"
+        },
+        {
+            "title": "The Warriors by Lindsay, Anna Robertson Brown",
+            "url": "http://www.gutenberg.org/ebooks/10004.txt.utf-8"
+        },
+        {
+            "title": "A Voyage to the Moon: With Some Account of the Manners and Customs, Science and Philosophy, of the People of Morosofia, and Other Lunarians by Tucker, George",
+            "url": "http://www.gutenberg.org/ebooks/10005.txt.utf-8"
+        },
+        {
+            "title": "La Fiammetta by Boccaccio, Giovanni",
+            "url": "http://www.gutenberg.org/ebooks/10006.txt.utf-8"
+        },
+        {
+            "title": "Carmilla by Le Fanu, Joseph Sheridan",
+            "url": "http://www.gutenberg.org/ebooks/10007.txt.utf-8"
+        },
+        {
+            "title": "The Mystery by White, Stewart Edward",
+            "url": "http://www.gutenberg.org/ebooks/10008.txt.utf-8"
+        }
+    ]
+}
