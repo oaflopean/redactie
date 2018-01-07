@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         };
         Button text_manip2 = (Button) findViewById(R.id.paragraph_button);
         Button text_manip3 = (Button) findViewById(R.id.period_button);
-        Button text_manip4 = (Button) findViewById(R.id.backspace_button);
+        ImageButton text_manip4 = (ImageButton) findViewById(R.id.backspace_button);
         Button text_manip5 = (Button) findViewById(R.id.comma_button);
         Button text_manip6 = (Button) findViewById(R.id.question_button);
         Button text_manip7 = (Button) findViewById(R.id.exclamation_button);
