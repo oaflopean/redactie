@@ -18,13 +18,12 @@
             <item>based on</item>
         </string-array>
         <string name="restingStory">\t \t \t You must load a text file. Please remember the file must end with a .txt extension. The encoding must be UTF-8. Use Notepad++ on Windows to save a file in the correct encoding. Predictoe is a way to generate hilarious stories from a base text. The text must be applied in order to begin writing your story. </string>
-        <string name="carriage">Para</string>
-        <string name="exclamation">!</string>
-        <string name="comma">?</string>
-
-        <string name="quote">,</string>
-        <string name="per">.</string>
-        <string name="bs">BS</string>
+        <string name="carriage">Return</string>
+        <string name="exclamation">excl</string>
+        <string name="comma">ques</string>
+        <string name="quote">comm</string>
+        <string name="per">per</string>
+        <string name="bs">Back space</string>
         <string name="share">Share</string>
     <string name="clear">Clear</string>
     <string name="corpus">corpus.txt</string>

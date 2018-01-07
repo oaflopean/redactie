@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                             redone = redone + " " + backspace[z];
                             lines = redone;
                         }
-                        if (lines != " "||lines!=null||lines!="  "||lines!="") {
+                        if (lines != " " || lines != null || lines != "  " || lines != "") {
                             setLines(lines);
                             String tip = MarkovChain.tipFinder(lines);
                             updateUserChoiceList(tip);
@@ -117,13 +117,12 @@ public class MainActivity extends AppCompatActivity {
         Button text_manip4 = (Button) findViewById(R.id.backspace_button);
         Button text_manip5 = (Button) findViewById(R.id.comma_button);
         Button text_manip6 = (Button) findViewById(R.id.question_button);
-        Button text_manip7 = (Button) findViewById(R.id.exclamation_button);
+
         text_manip2.setOnClickListener(myListner);
         text_manip3.setOnClickListener(myListner);
         text_manip4.setOnClickListener(myListner);
         text_manip5.setOnClickListener(myListner);
         text_manip6.setOnClickListener(myListner);
-        text_manip7.setOnClickListener(myListner);
     }
 
     @Override
@@ -315,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateUserChoiceList(String tip) {
         ArrayList<String> ink = new ArrayList<String>();
-        if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n \t") {
+        if (tip.equals( ". ") || tip.equals( "? " )|| tip.equals("! ")|| tip.equals( ", ") || tip.equals("\n \t")){
             for (int i = 0; i < 60; i++) {
                 String blink = MarkovChain.rndWord(markovChain);
                 ink.add(blink);
