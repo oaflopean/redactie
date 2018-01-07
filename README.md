@@ -13,3 +13,4 @@ Predictoe uses Markov chains generated from a text file to guide the word choice
 * Use multiple sources to participate in a new form of art
 
 https://play.google.com/store/apps/details?id=com.copypastapublishing.predictoenovelwriter
+![screenshot 2](https://user-images.githubusercontent.com/10416238/34652355-1b06d71e-f3a2-11e7-99c6-5fab43efb77c.png)
