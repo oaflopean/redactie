@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Predictoe" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="colorPrimary">@color/storyBG</item>
+        <item name="colorPrimaryDark">@color/tipBG</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+    </style>
+
 </resources>
