@@ -1,4 +1,4 @@
 # predictoe_source
 Predictoe: The Novel Writer open source Android app
 
-The changes must be made in the final two methods in MainActivity, addWords and generateInk. They must be modified to change the current Markov system. 
+ The specific license for this app is the cc or Creative commons license. THe source is meant to be shared or modified with original credit given to Jordan Jones, creator. 
