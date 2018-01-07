@@ -51,6 +51,7 @@
                 android:layout_marginVertical="6dp"
                 android:layout_weight="1"
                 android:background="@android:drawable/bottom_bar"
+                android:backgroundTint="@color/storyBG"
                 android:text="@string/per" />
 
             <Button
@@ -61,6 +62,7 @@
                 android:layout_marginVertical="6dp"
                 android:layout_weight="1"
                 android:background="@android:drawable/bottom_bar"
+                android:backgroundTint="@color/storyBG"
                 android:text="@string/exclamation" />
 
             <Button
@@ -71,6 +73,7 @@
                 android:layout_marginVertical="6dp"
                 android:layout_weight="1"
                 android:background="@android:drawable/bottom_bar"
+                android:backgroundTint="@color/storyBG"
                 android:text="@string/comma" />
 
             <Button
@@ -83,6 +86,7 @@
                 android:layout_toEndOf="@+id/linearLayout7"
                 android:layout_weight="1"
                 android:background="@android:drawable/bottom_bar"
+                android:backgroundTint="@color/storyBG"
                 android:text="@string/quote" />
 
             <Button
@@ -96,6 +100,7 @@
                 android:layout_marginVertical="6dp"
                 android:layout_weight="1"
                 android:background="@android:drawable/bottom_bar"
+                android:backgroundTint="@color/storyBG"
                 android:text="@string/carriage" />
 
         </LinearLayout>
@@ -132,8 +137,7 @@
             <ImageButton
                 android:id="@+id/backspace_button"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="6dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:src="@android:drawable/ic_input_delete"
                 android:text="@string/bs" />
