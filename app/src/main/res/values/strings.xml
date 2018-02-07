@@ -26,9 +26,9 @@
         <string name="bs">BS</string>
         <string name="share">Share</string>
     <string name="clear">Clear</string>
-    <string name="corpus">corpus.txt</string>
+    <string name="corpus">high-strangeness.txt</string>
     <string name="clearcorpus">Clear corpus</string>
-    <string name="toEnd">Per.</string>
+    <string name="toEnd">To End</string>
 
 
 </resources>

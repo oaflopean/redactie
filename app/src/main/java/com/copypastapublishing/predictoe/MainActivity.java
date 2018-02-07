@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 StringBuilder builder = new StringBuilder();
 
                 while ((line = reader.readLine()) != null) {
-                    builder.append(line);
+                    builder.append(line +" ");
                 }
                 // Do something with the content in
                 contents = builder.toString();
