@@ -96,7 +96,9 @@ public class MarkovChain {
             } catch (NullPointerException n) {
 
 
+            } catch (StringIndexOutOfBoundsException s) {
             }
+
         } else {
         }
         return newPhrase.toString().replace("[", "").replace("]", "").replace(",", "").replace("\"", "");
