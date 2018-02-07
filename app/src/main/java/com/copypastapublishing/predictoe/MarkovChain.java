@@ -16,6 +16,9 @@ public class MarkovChain {
         try {
             String reduced = lines.replace(",", "").replace(". ", "").replace("? ", "").replace("! ", "").replace("\" ", "");
             String[] tipfinder = reduced.split(" ");
+            if (tipfinder[tipfinder.length-1].contains(".")){
+                return ". ";
+            }
             String tip = tipfinder[tipfinder.length - 1];
             return tip;
         } catch (ArrayIndexOutOfBoundsException a) {
@@ -60,7 +63,7 @@ public class MarkovChain {
     }
 
 
-    public static String generateInk(String tip, Hashtable<String, Vector<String>> markovChain) {
+    public static String generateInk(String tip, Hashtable<String, Vector<String>> markovChain, int spinner, boolean toEnd) {
         Random rnd = new Random();
         String nextWord = tip;
 
@@ -71,15 +74,25 @@ public class MarkovChain {
 
         if (nextWords != null && nextWords.size() != 0) {
             try {
-                for (int i = 0; i < 4; i++) {
+                if (toEnd==false){
+                for (int i = 0; i < spinner; i++) {
                     Vector<String> wordSelection = markovChain.get(nextWord);
                     int wordSelectionLen = wordSelection.size();
                     nextWord = wordSelection.get(rnd.nextInt(wordSelectionLen));
 
                     newPhrase.add(nextWord);
+                }}
+                else {
+                    while (nextWord.charAt(nextWord.length()-1) != '.'){
+                        Vector<String> wordSelection = markovChain.get(nextWord);
+                        int wordSelectionLen = wordSelection.size();
+                        nextWord = wordSelection.get(rnd.nextInt(wordSelectionLen));
+
+                        newPhrase.add(nextWord);
+                    }
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                return generateInk(tip, markovChain);
+                return generateInk(tip, markovChain, spinner, toEnd);
             } catch (NullPointerException n) {
 
 
@@ -90,7 +103,7 @@ public class MarkovChain {
 
     }
 
-    public static String rndWord(Hashtable<String, Vector<String>> markovChain) {
+    public static String rndWord(Hashtable<String, Vector<String>> markovChain, Integer spinner) {
         Random rnd = new Random();
         Vector<String> newPhrase = new Vector<String>();
         String nextWord = "";
@@ -103,7 +116,7 @@ public class MarkovChain {
         Vector<String> nextWords = markovChain.get(tip);
         if (nextWords != null && nextWords.size() != 0) {
             try {
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < spinner; i++) {
                     Vector<String> wordSelection = markovChain.get(nextWord);
                     int wordSelectionLen = wordSelection.size();
                     nextWord = wordSelection.get(rnd.nextInt(wordSelectionLen));

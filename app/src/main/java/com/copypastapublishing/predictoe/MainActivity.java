@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Paint;
+import android.media.Image;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.support.v7.app.AlertDialog;
@@ -19,8 +20,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
@@ -41,10 +45,11 @@ public class MainActivity extends AppCompatActivity {
     String word;
     String input;
     private static String contents = "";
-    private static String corpusinfotext = "corpus.txt";
+    private static String corpusinfotext = "highstrangeness.txt";
     private static String story = "";
     private static String lines = "";
     Hashtable<String, Vector<String>> markovChain = new Hashtable<String, Vector<String>>();
+    Integer spinner=2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +60,49 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         TextView storyMode = (TextView) findViewById(R.id.story_text);
         storyMode.setMovementMethod(new ScrollingMovementMethod());
+        CheckBox endCheck = (CheckBox)findViewById(R.id.checkBox);
+
+        endCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                                               @Override
+                                               public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                                                updateUserChoiceList(MarkovChain.tipFinder(lines));
+                                               }
+                                           }
+        );
+
+        Spinner mspin=(Spinner) findViewById(R.id.spinner);
+
+
+
+        Integer[] items = new Integer[]{1,2,3,4,5,6,7,8};
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item, items);
+
+
+
+        mspin.setAdapter(adapter);
+        mspin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView adapter, View v, int i, long lng) {
+
+                updateUserChoiceList(MarkovChain.tipFinder(lines));            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            {
+
+            }
+        });
         View.OnClickListener myListner = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String token = "";
                 switch (v.getId()) {
+                    case R.id.refresh:
+                        if (lines!="") {
+                            updateUserChoiceList(MarkovChain.tipFinder(lines));
+                        }else {updateUserChoiceList(". ");}
+                        break;
                     case R.id.paragraph_button:
 
                         token = "\n \t";
@@ -113,12 +156,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
         };
-        Button text_manip2 = (Button) findViewById(R.id.paragraph_button);
+        ImageButton text_manip2 = (ImageButton) findViewById(R.id.paragraph_button);
+        ImageButton refresh1=(ImageButton) findViewById(R.id.refresh);
         Button text_manip3 = (Button) findViewById(R.id.period_button);
         ImageButton text_manip4 = (ImageButton) findViewById(R.id.backspace_button);
         Button text_manip5 = (Button) findViewById(R.id.comma_button);
         Button text_manip6 = (Button) findViewById(R.id.question_button);
         Button text_manip7 = (Button) findViewById(R.id.exclamation_button);
+        refresh1.setOnClickListener(myListner);
         text_manip2.setOnClickListener(myListner);
         text_manip3.setOnClickListener(myListner);
         text_manip4.setOnClickListener(myListner);
@@ -137,6 +182,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        setLines(lines);
+        TextView storyMode = (TextView) findViewById(R.id.story_text);
+        storyMode.setText(lines);
+        updateUserChoiceList(MarkovChain.tipFinder(lines));
     }
 
     @Override
@@ -316,9 +365,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateUserChoiceList(String tip) {
         ArrayList<String> ink = new ArrayList<String>();
+        try {
+            Spinner mspin=(Spinner) findViewById(R.id.spinner);
+            spinner = (Integer) mspin.getSelectedItem();
+        }
+        catch (NullPointerException n){
+
+        }
         if (tip == ". " || tip == "? " || tip == "! " || tip == ", " || tip == "\n \t") {
+            try {
+                Spinner mspin=(Spinner) findViewById(R.id.spinner);
+                spinner = (Integer) mspin.getSelectedItem();
+            }
+            catch (NullPointerException n){
+
+            }
             for (int i = 0; i < 60; i++) {
-                String blink = MarkovChain.rndWord(markovChain);
+                String blink = MarkovChain.rndWord(markovChain, spinner);
                 ink.add(blink);
             }
             Set<String> hs = new HashSet<>(ink);
@@ -328,8 +391,10 @@ public class MainActivity extends AppCompatActivity {
 
             setList(ink);
         } else {
+            CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
+            Boolean toEnd=checkBox.isChecked();
             for (int i = 0; i < 60; i++) {
-                String blink = MarkovChain.generateInk(tip, markovChain);
+                String blink = MarkovChain.generateInk(tip, markovChain, spinner, toEnd);
                 if (blink != " " && blink != null && blink != "") {
                     ink.add(blink);
                 }

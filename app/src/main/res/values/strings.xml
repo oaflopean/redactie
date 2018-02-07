@@ -28,6 +28,7 @@
     <string name="clear">Clear</string>
     <string name="corpus">corpus.txt</string>
     <string name="clearcorpus">Clear corpus</string>
+    <string name="toEnd">To End</string>
 
 
 </resources>

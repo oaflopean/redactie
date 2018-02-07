@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/predictoe_opensource.iml" filepath="$PROJECT_DIR$/predictoe_opensource.iml" />
+      <module fileurl="file://$PROJECT_DIR$/redactie.iml" filepath="$PROJECT_DIR$/redactie.iml" />
     </modules>
   </component>
 </project>
